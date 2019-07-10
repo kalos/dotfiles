@@ -1,0 +1,64 @@
+[user]
+  name  = Calogero Lo Leggio
+  email = kalos@nerdrug.org
+
+[github]
+  user = kalos
+
+[core]
+  editor = vim
+  pager  = less -FRSX
+  whitespace = trailing-space,space-before-tab,indent-with-non-tab,cr-at-eol
+  autocrlf = input
+  safecrlf = true
+
+[merge]
+  tool = vimdiff
+
+[push]
+  default = simple
+
+[apply]
+  whitespace = nowarn
+  #whitespace = strip
+
+[alias]
+  ci = commit -a
+  civ = commit -av
+  cv = commit -v
+  co = checkout
+  st = status
+  lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+  hist = log --pretty=format:'%h %ad | %s%d [%an]' --graph --date=short
+  serve = daemon --reuseaddr --verbose  --base-path=. --export-all --enable=receive-pack
+  servegit = daemon --reuseaddr --verbose  --base-path=. --export-all --enable=receive-pack ./.git
+  last  = cat-file commit HEAD
+  ls    = ls-files --exclude-per-directory=.gitignore \
+          --exclude-from=.git/info/exclude \
+          -t -o -u -s -m -d
+  unstage = reset HEAD --
+  wdiff = diff --color-words
+  wshow = show --color-words
+  restore = !git checkout $(git rev-list -n 1 HEAD -- \"$1\")^ -- \"$1\"
+  type = cat-file -t
+  dump = cat-file -p
+
+[color]
+  pager = true
+  ui = auto
+  branch = auto
+  diff = auto
+  status = auto
+[color "branch"]
+  current = yellow reverse
+  local = yellow
+  remote = green
+[color "diff"]
+  meta = yellow bold
+  frag = magenta bold
+  old = red bold
+  new = green bold
+[color "status"]
+  added = yellow
+  changed = green
+  untracked = cyan

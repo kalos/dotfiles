@@ -14,6 +14,7 @@ I provision my dotfiles with **[ansible-debian-workstation](https://github.com/k
 
 | dotfile   | description |
 |-----------|-------------|
+| [git](https://git-scm.com) | gitconfig |
 
 
 
