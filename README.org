@@ -2,9 +2,10 @@
 Calogero Lo Leggio's dotfiles, managed with [[https://github.com/twpayne/chezmoi][=chezmoi=]].
 
 ** Modules
-#+begin_example
 - personal: sensitive/secret data
-#+end_example
+- ssh: manage configs and keys
+- starship: cross-shell prompt
+- emoji: file and service (used in starship)
 
 ** Install
 Install them with:
