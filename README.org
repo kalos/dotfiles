@@ -19,12 +19,21 @@ Software required:
 - chezmoi
 - sudo
 - git [auto-install on debian/arch]
-- age (only if 'personal' module is true) [auto-installed on arch/debian]
-- bitwarden-cli [bw] (only if 'personal' module is true) [auto-installed on arch]
+- age (only if 'personal' module is true)
+- bitwarden-cli [bw] (only if 'personal' module is true)
 #+end_example
 
+*** archlinux
+#+BEGIN_SRC shell
+sudo pacman -Sy sudo chezmoi git age bitwarden-cli
+#+END_SRC
+
 *** debian
-Install required bitwarden CLI:
+#+BEGIN_SRC shell
+sudo apt install sudo chezmoi git age
+#+END_SRC
+
+bitwarden CLI:
 
 #+BEGIN_SRC shell
 TMP_BWCLI=$(mktemp -d)
