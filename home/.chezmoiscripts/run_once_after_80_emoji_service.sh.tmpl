@@ -1,0 +1,8 @@
+#!{{ lookPath "bash" }}
+
+# emoji_db hash: {{ include (joinPath .chezmoi.homeDir ".emoji_db")  | sha256sum }}
+
+# enable emoji systemd user service when .emoji_db change
+# ref: https://www.chezmoi.io/user-guide/use-scripts-to-perform-actions/#run-a-script-when-the-contents-of-another-file-changes
+
+systemctl --user enable emoji.service

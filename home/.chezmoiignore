@@ -33,3 +33,13 @@
 {{ if not .personal }}
 .chezmoiscripts/*decrypt-chezmoi-age-key.sh
 {{ end }}
+
+
+
+# ignore specific "module"
+
+{{ if not .emoji }}
+.emoji_db
+.config/systemd/user/emoji.service
+.chezmoiscripts/*emoji_service.sh
+{{ end }}

@@ -1,0 +1,9 @@
+[Unit]
+Description=write random emoji from my db
+
+[Service]
+Type=oneshot
+ExecStart=/bin/sh -c 'shuf -n1 %h/.emoji_db > %h/.emoji'
+
+[Install]
+WantedBy=default.target
