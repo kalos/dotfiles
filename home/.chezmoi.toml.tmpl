@@ -15,6 +15,13 @@
 {{ if $personal }}
     name            = "Calogero Lo Leggio"
 
+    email           = {{ (bitwardenFields "item" "b2ca8b0b-97ee-4d1c-94c8-ac1e015e4a22").personal.value | quote }}
+    email_nerdrug   = {{ (bitwardenFields "item" "b2ca8b0b-97ee-4d1c-94c8-ac1e015e4a22").nerdrug.value | quote }}
+    email_libreit   = {{ (bitwardenFields "item" "b2ca8b0b-97ee-4d1c-94c8-ac1e015e4a22").libreit.value | quote }}
+    email_desegno   = {{ (bitwardenFields "item" "b2ca8b0b-97ee-4d1c-94c8-ac1e015e4a22").desegno.value | quote }}
+    email_pandev    = {{ (bitwardenFields "item" "b2ca8b0b-97ee-4d1c-94c8-ac1e015e4a22").pandev.value | quote }}
+    email_advenias  = {{ (bitwardenFields "item" "b2ca8b0b-97ee-4d1c-94c8-ac1e015e4a22").advenias.value | quote }}
+
     gpg_keyid       = "0x831E187353BAF98D"
     github_user     = "kalos"
 
