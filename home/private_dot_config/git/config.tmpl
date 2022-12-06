@@ -1,0 +1,128 @@
+[user]
+  name  = {{ .name }}
+  email = {{ .email }}
+  signingkey = {{ .gpg_keyid }}
+
+[github]
+  user = {{ .github_user }}
+
+[includeIf "gitdir:~/projects/libreit"]
+  path = ~/.config/git/config_libreit
+
+[includeIf "gitdir:~/projects/libreit/clienti/desegno"]
+  path = ~/.config/git/config_desegno
+
+[includeIf "gitdir:~/projects/libreit/clienti/pandev"]
+  path = ~/.config/git/config_pandev
+
+[includeIf "gitdir:~/projects/libreit/clienti/pandev/advenias"]
+  path = ~/.config/git/config_advenias
+
+
+[core]
+  editor = vim
+  pager  = less -FRSX
+  whitespace = trailing-space,space-before-tab,indent-with-non-tab,cr-at-eol
+  autocrlf = input
+  safecrlf = true
+
+[status]
+  submodulesummary = 1
+
+[merge]
+  tool = vimdiff
+
+[push]
+  default = simple
+
+[apply]
+  whitespace = nowarn
+  #whitespace = strip
+
+[alias]
+  ci = commit -a
+  civ = commit -av
+  cv = commit -v
+  co = checkout
+  st = status
+  lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+  hist = log --pretty=format:'%h %ad | %s%d [%an]' --graph --date=short
+  serve = daemon --reuseaddr --verbose  --base-path=. --export-all --enable=receive-pack
+  servegit = daemon --reuseaddr --verbose  --base-path=. --export-all --enable=receive-pack ./.git
+  last  = cat-file commit HEAD
+  ls    = ls-files --exclude-per-directory=.gitignore \
+          --exclude-from=.git/info/exclude \
+          -t -o -u -s -m -d
+  ign = ls-files -o -i --exclude-standard # list all ignored files
+  unstage = reset HEAD --
+  uncommit = reset --soft HEAD~
+  wdiff = diff --color-words
+  wshow = show --color-words
+  restore = !git checkout $(git rev-list -n 1 HEAD -- \"$1\")^ -- \"$1\"
+  type = cat-file -t
+  dump = cat-file -p
+  # list most recently-used branches
+  lb = !git reflog show --pretty=format:'%gs ~ %gd' --date=relative | grep 'checkout:' | grep -oE '[^ ]+ ~ .*' | awk -F~ '!seen[$1]++' | head -n 10 | awk -F' ~ HEAD@{' '{printf(\"  \\033[33m%s: \\033[37m %s\\033[0m\\n\", substr($2, 1, length($2)-1), $1)}'
+
+#[color]
+#  pager = true
+#  ui = auto
+#  branch = auto
+#  diff = auto
+#  status = auto
+#[color "branch"]
+#  current = yellow reverse
+#  local = yellow
+#  remote = green
+#[color "diff"]
+#  meta = yellow bold
+#  frag = magenta bold
+#  old = red bold
+#  new = green bold
+#[color "status"]
+#  added = yellow
+#  changed = green
+#  untracked = cyan
+
+# COLORS
+# ------
+# Dracula Dark Theme
+[color]
+  ui = auto
+[color "branch"]
+  current = cyan bold reverse
+  local = white
+  plain =
+  remote = cyan
+[color "diff"]
+  commit =
+  func = cyan
+  plain =
+  whitespace = magenta reverse
+  meta = white
+  frag = cyan bold reverse
+  old = red
+  new = green
+[color "grep"]
+  context =
+  filename =
+  function =
+  linenumber = white
+  match =
+  selected =
+  separator =
+[color "interactive"]
+  error =
+  header =
+  help =
+  prompt =
+[color "status"]
+  added = green
+  changed = white
+  header =
+  localBranch =
+  nobranch =
+  remoteBranch = cyan bold
+  unmerged = magenta bold reverse
+  untracked = red
+  updated = green bold
