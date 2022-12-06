@@ -1,5 +1,22 @@
 {{/* default 'module' value */}}
-{{- $personal := false -}}{{/* true if this machine should have personal sensitive/secret data */}}
+{{- $personal := false -}}{{/* true if this host should have personal sensitive/secret data */}}
+{{- $ephemeral := false -}}{{/* true if this host is ephemeral, e.g. a cloud or VM instance */}}
+
+{{/* detect GitHub codespaces, VSCode remote containers, Docker containers, Multipass VMs, and Vagrant boxes */}}
+{{- if or (env "CODESPACES") (env "REMOTE_CONTAINERS_IPC") (eq .chezmoi.username "root" "ubuntu" "vagrant" "vscode") -}}
+{{-   $ephemeral = true -}}
+{{- end -}}
+
+{{/* default config per host */}}
+{{- if not $ephemeral -}}
+{{-   if eq .chezmoi.hostname "jiji" -}}
+{{-     $personal = true -}}
+{{-   else if eq .chezmoi.os "android" -}}{{/* android */}}
+{{-     $personal = true -}}
+{{-   else if stdinIsATTY -}}
+{{-     $personal = promptBoolOnce . "personal" "Enable personal configs/secrets?" -}}
+{{-   end -}}
+{{- end -}}
 
 {{/* if OS is linux use $osID var (ex: linux-debian) */}}
 {{- $osID := .chezmoi.os -}}
