@@ -43,3 +43,8 @@
 .config/systemd/user/emoji.service
 .chezmoiscripts/*emoji_service.sh
 {{ end }}
+
+{{ if not .starship }}
+.config/starship*.toml
+.chezmoiscripts/os/debian/*starship.sh
+{{ end }}

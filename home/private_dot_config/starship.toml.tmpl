@@ -1,0 +1,75 @@
+# Don't print a new line at the start of the prompt
+add_newline = false
+
+#[line_break]
+#disabled = false
+
+# colors
+# petauro scuro #534a75
+# petauro brillante #8871d9
+
+[character]
+#success_symbol = "[➟]()"
+success_symbol = "[❯](#534a75)"
+error_symbol = "[✗](red)"
+
+[[battery.display]]
+threshold = 30
+style = "bold yellow"
+
+[[battery.display]]
+threshold = 10
+style = "bold red"
+
+[cmd_duration]
+min_time = 2_000
+style = "#8871d9"
+format = "⌛ took [$duration](italic $style) "
+show_notifications = false
+min_time_to_notify = 60_000
+
+[directory]
+truncation_length = 4
+truncation_symbol = "…/"
+truncate_to_repo = false
+style = "#8871d9"
+#style = "#7652ff"
+#style = "#663eff"
+#read_only = "🛇"
+#read_only_style = "red"
+
+[directory.substitutions]
+"/home/kalos/projects/" = "proj"
+"/home/kalos/cloud/" = "cloud"
+
+[hostname]
+ssh_only = false
+format = "💻️ [${hostname}]($style) "
+#symbol = "💻️"
+style = "bold italic #653ef8"
+
+[memory_usage]
+format = "$symbol [${ram}( | ${swap})]($style) "
+threshold = 80
+style = "bold dimmed white"
+disabled = false
+
+[status]
+map_symbol = true
+disabled = false
+
+[username]
+style_user = "white bold"
+style_root = "red bold"
+#format = "🙊 [$user]($style) "
+format = "[$user]($style) "
+disabled = false
+show_always = true
+
+[aws]
+disabled = true
+
+[custom.emoji]
+#disabled = true
+command = "shuf -n1 /home/kalos/.emoji"
+#detect_files = ["/home/kalos/.emoji"]

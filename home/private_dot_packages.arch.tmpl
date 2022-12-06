@@ -6,6 +6,11 @@ grub-btrfs
 {{- end }}
 
 ## shell / CLI
+
+{{- if .starship }}
+starship
+{{ end -}}
+
 htop
 iotop
 tmux
