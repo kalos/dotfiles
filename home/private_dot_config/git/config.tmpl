@@ -1,3 +1,4 @@
+{{ if .personal }}
 [user]
   name  = {{ .name }}
   email = {{ .email }}
@@ -17,7 +18,7 @@
 
 [includeIf "gitdir:~/projects/libreit/clienti/pandev/advenias"]
   path = ~/.config/git/config_advenias
-
+{{- end }}
 
 [core]
   editor = vim
