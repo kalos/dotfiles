@@ -1,0 +1,4 @@
+#!{{ lookPath "bash" }}
+
+# install chezmoi required packages 
+sudo pacman -S --noconfirm --needed git {{ if .personal }}age bitwarden-cli{{ end }}

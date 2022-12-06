@@ -1,0 +1,35 @@
+# Load only distro-specific scripts and configs
+.chezmoiscripts/os/**
+
+{{ if eq .chezmoi.osRelease.id "arch" }}
+!.chezmoiscripts/os/arch/**
+
+.packages*
+!.packages.arch
+{{ end }}
+
+{{ if eq .chezmoi.osRelease.id "debian" }}
+!.chezmoiscripts/os/debian/**
+
+.packages*
+!.packages.debian
+{{ end }}
+
+
+# Load only host-specific scripts
+.chezmoiscripts/hosts/**
+
+{{ if eq .chezmoi.hostname "jiji" }}
+#!.chezmoiscripts/hosts/jiji/**
+{{ end }}
+
+{{ if eq .chezmoi.osRelease.id "arch" }}
+!.chezmoiscripts/os/arch/**
+{{ end }}
+
+
+
+# ignore personal file (with module personal = false)
+{{ if not .personal }}
+.chezmoiscripts/*decrypt-chezmoi-age-key.sh
+{{ end }}

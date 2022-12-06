@@ -1,0 +1,30 @@
+## shell / CLI
+htop
+iotop
+#broot
+ranger
+ipcalc
+tmux
+exa
+#passgen
+ncdu
+gdu
+ripgrep
+fzf
+fd-find
+#dog
+#duf
+#bat
+px
+
+
+
+## host-specific settings:
+{{- if eq .chezmoi.hostname "jiji" -}}
+
+# intel microcode
+intel-microcode
+
+# fwupd - Linux Vendor Firmware Service (LVFS)
+fwupd
+{{ end }}

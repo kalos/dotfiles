@@ -1,0 +1,7 @@
+#!{{ lookPath "bash" }}
+
+{{ if eq .chezmoi.osRelease.id "arch" }}
+echo "%wheel  ALL=(ALL:ALL) NOPASSWD: ALL" | sudo tee /etc/sudoers.d/wheel_group
+{{ else if eq .chezmoi.osRelease.id "debian" }}
+echo "%sudo   ALL=(ALL:ALL) NOPASSWD: ALL" | sudo tee /etc/sudoers.d/sudo_group
+{{ end }}

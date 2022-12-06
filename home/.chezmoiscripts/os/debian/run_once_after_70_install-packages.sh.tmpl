@@ -1,0 +1,8 @@
+#!{{ lookPath "bash" }}
+
+# packages.debian hash: {{ include (joinPath .chezmoi.homeDir ".packages.debian")  | sha256sum }}
+
+# install arch packages when packages.arch change
+# ref: https://www.chezmoi.io/user-guide/use-scripts-to-perform-actions/#run-a-script-when-the-contents-of-another-file-changes
+
+grep -Ev '^#|^$' "$(chezmoi target-path)/.packages.debian" | xargs -r -- sudo apt-get install -y

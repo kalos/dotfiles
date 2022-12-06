@@ -1,0 +1,43 @@
+* Dotfiles
+Calogero Lo Leggio's dotfiles, managed with [[https://github.com/twpayne/chezmoi][=chezmoi=]].
+
+** Modules
+#+begin_example
+- personal: sensitive/secret data
+#+end_example
+
+** Install
+Install them with:
+
+#+BEGIN_SRC shell
+chezmoi init kalos
+#+END_SRC
+
+Software required:
+
+#+begin_example
+- chezmoi
+- sudo
+- git [auto-install on debian/arch]
+- age (only if 'personal' module is true) [auto-installed on arch/debian]
+- bitwarden-cli [bw] (only if 'personal' module is true) [auto-installed on arch]
+#+end_example
+
+*** debian
+Install required bitwarden CLI:
+
+#+BEGIN_SRC shell
+TMP_BWCLI=$(mktemp -d)
+wget https://github.com/bitwarden/clients/releases/download/cli-v2022.10.0/bw-linux-2022.10.0.zip -O "${TMP_BWCLI}/bw.zip"
+pushd "${TMP_BWCLI}"
+unzip bw.zip
+chmod +x bw
+sudo mv bw /usr/local/bin/
+popd
+rm -fr ${TMP_BWCLI}
+#+END_SRC
+
+** Notes
+Notes for security:
+  - sensitive data, with visible filename, are encrypted with age
+  - secret data are sync with bw/syncthing

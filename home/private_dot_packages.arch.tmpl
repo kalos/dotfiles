@@ -1,0 +1,40 @@
+## system
+
+{{- /* install grub-btrfs only if btrfs is root fs and is used with specific layout */}}
+{{- if contains "subvol=/@" (output "findmnt" "-n" "--notruncate" "-o" "OPTIONS" "/") }}
+grub-btrfs
+{{- end }}
+
+## shell / CLI
+htop
+iotop
+tmux
+broot
+ranger
+ipcalc
+exa
+#passgen
+ncdu
+gdu
+ripgrep
+fzf
+fd
+dog
+duf
+bat
+#px
+
+
+
+## host-specific settings:
+{{- if eq .chezmoi.hostname "jiji" }}
+
+# intel microcode
+intel-ucode
+
+# thermald to fix x1c6 thermal throttling
+thermald
+
+# fwupd - Linux Vendor Firmware Service (LVFS)
+fwupd
+{{ end -}}
