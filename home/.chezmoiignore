@@ -20,13 +20,14 @@
 .chezmoiscripts/hosts/**
 
 {{ if eq .chezmoi.hostname "jiji" }}
-#!.chezmoiscripts/hosts/jiji/**
-{{ end }}
+!.chezmoiscripts/hosts/jiji/**
 
-{{ if eq .chezmoi.osRelease.id "arch" }}
-!.chezmoiscripts/os/arch/**
-{{ end }}
+{{   if .ssh }}
+.ssh/conf.local.d/**
+!.ssh/conf.local.d/jiji.conf
+{{   end }}
 
+{{ end }}
 
 
 # ignore personal file (with module personal = false)
@@ -38,6 +39,10 @@
 
 
 # ignore specific "module"
+
+{{ if (or (not .ssh) (not .personal)) }}
+.ssh/**
+{{ end }}
 
 {{ if not .emoji }}
 .emoji_db

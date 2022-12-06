@@ -1,8 +1,9 @@
 {{/* default 'module' value */}}
 {{- $personal := false -}}{{/* true if this host should have personal sensitive/secret data */}}
 {{- $ephemeral := false -}}{{/* true if this host is ephemeral, e.g. a cloud or VM instance */}}
-{{- $emoji := false -}}
+{{- $ssh := false -}}
 {{- $starship := false -}}
+{{- $emoji := false -}}
 
 {{/* detect GitHub codespaces, VSCode remote containers, Docker containers, Multipass VMs, and Vagrant boxes */}}
 {{- if or (env "CODESPACES") (env "REMOTE_CONTAINERS_IPC") (eq .chezmoi.username "root" "ubuntu" "vagrant" "vscode") -}}
@@ -13,16 +14,19 @@
 {{- if not $ephemeral -}}
 {{-   if eq .chezmoi.hostname "jiji" -}}
 {{-     $personal = true -}}
-{{-     $emoji = true -}}
+{{-     $ssh = true -}}
 {{-     $starship = true -}}
+{{-     $emoji = true -}}
 {{-   else if eq .chezmoi.os "android" -}}{{/* android */}}
 {{-     $personal = true -}}
-{{-     $emoji = false -}}
+{{-     $ssh = true -}}
 {{-     $starship = false -}}
+{{-     $emoji = false -}}
 {{-   else if stdinIsATTY -}}
 {{-     $personal = promptBoolOnce . "personal" "Enable personal configs/secrets?" -}}
-{{-     $emoji = promptBoolOnce . "emoji" "Enable emoji in prompt?" -}}
-{{-     $starship = promptBoolOnce . "starship" "Enable starship?" -}}
+{{-     $ssh = promptBoolOnce . "ssh" "ssh?" -}}
+{{-     $starship = promptBoolOnce . "starship" "starship?" -}}
+{{-     $emoji = promptBoolOnce . "emoji" "emoji in starship prompt?" -}}
 {{-   end -}}
 {{- end -}}
 
@@ -38,8 +42,9 @@
     ephemeral = {{ $ephemeral }}
     osid = {{ $osID | quote }}
 
-    emoji = {{ $emoji }}
+    ssh = {{ $ssh }}
     starship = {{ $starship }}
+    emoji = {{ $emoji }}
 
 {{ if $personal }}
     name            = "Calogero Lo Leggio"

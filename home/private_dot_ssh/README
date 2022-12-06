@@ -1,0 +1,15 @@
+This directory is managed with chezmoi and syncthing.
+
+In chezmoi repo there are only 'config', conf.local.d/, known_hosts and keys (private and public), ecrypted with age.
+
+~.ssh/
+├── config (simple Include conf.d/* and conf.local.d/*)
+├── known_hosts
+├── id_ed25519
+├── id_ed25519.pub
+├── conf.d [symlink to syncthing share dir] (symlink managed with chezmoi)
+│   ├── chebuoni.conf
+│   ├── libreit.conf
+│   └── tsway.conf
+└── conf.local.d
+    └── jiji.conf / mijiji.conf / other (using template and .chezmoiignore)
