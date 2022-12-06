@@ -1,0 +1,25 @@
+{{/* default 'module' value */}}
+{{- $personal := false -}}{{/* true if this machine should have personal sensitive/secret data */}}
+
+{{/* if OS is linux use $osID var (ex: linux-debian) */}}
+{{- $osID := .chezmoi.os -}}
+{{- if (and (eq .chezmoi.os "linux") (hasKey .chezmoi.osRelease "id")) -}}
+{{-   $osID = printf "%s-%s" .chezmoi.os .chezmoi.osRelease.id -}}
+{{- end -}}
+
+
+[data]
+    personal = {{ $personal }}
+    osid = {{ $osID | quote }}
+
+{{ if $personal }}
+    name            = "Calogero Lo Leggio"
+
+    gpg_keyid       = "0x831E187353BAF98D"
+    github_user     = "kalos"
+
+encryption = "age"
+[age]
+    identity = "~/.config/chezmoi/.secretkey"
+    recipient = "age1nzcmlyh8duvpqj2n40vsdyzuekd2nxk7kxjmcv4dagmpselyqe7qea9gje"
+{{- end -}}
