@@ -1,0 +1,11 @@
+#!{{ lookPath "bash" }}
+
+# install AUR wrapper: yay
+if [[ ! $(command -v yay) ]]; then
+  sudo pacman -S --needed git base-devel
+  git clone https://aur.archlinux.org/yay-bin.git /tmp/yay
+  pushd /tmp/yay
+  makepkg -si
+  popd
+  rm -fr /tmp/yay
+fi
