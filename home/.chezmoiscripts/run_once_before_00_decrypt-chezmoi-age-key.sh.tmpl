@@ -1,6 +1,6 @@
 #!{{ lookPath "bash" }}
 
 if [ ! -f "${HOME}/.config/chezmoi/.secretkey" ]; then
-    age --decrypt --output "${HOME}/.config/chezmoi/.secretkey" "{{ .chezmoi.sourceDir }}/.chezmoi_secretkey.age"
+    age --decrypt --output "${HOME}/.config/chezmoi/.secretkey" "$(chezmoi source-path)/.chezmoi_secretkey.age"
     chmod 600 "${HOME}/.config/chezmoi/.secretkey"
 fi
