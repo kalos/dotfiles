@@ -2,6 +2,7 @@
 {{- $personal := false -}}{{/* true if this host should have personal sensitive/secret data */}}
 {{- $ephemeral := false -}}{{/* true if this host is ephemeral, e.g. a cloud or VM instance */}}
 {{- $ssh := false -}}
+{{- $syncthing := false -}}
 {{- $starship := false -}}
 {{- $emoji := false -}}
 
@@ -15,18 +16,21 @@
 {{-   if eq .chezmoi.hostname "jiji" -}}
 {{-     $personal = true -}}
 {{-     $ssh = true -}}
+{{-     $syncthing = true -}}
 {{-     $starship = true -}}
 {{-     $emoji = true -}}
 {{-   else if eq .chezmoi.os "android" -}}{{/* android */}}
 {{-     $personal = true -}}
 {{-     $ssh = true -}}
+{{-     $syncthing = true -}}
 {{-     $starship = false -}}
 {{-     $emoji = false -}}
 {{-   else if stdinIsATTY -}}
-{{-     $personal = promptBoolOnce . "personal" "Enable personal configs/secrets?" -}}
-{{-     $ssh = promptBoolOnce . "ssh" "ssh?" -}}
-{{-     $starship = promptBoolOnce . "starship" "starship?" -}}
-{{-     $emoji = promptBoolOnce . "emoji" "emoji in starship prompt?" -}}
+{{-     $personal = promptBoolOnce . "personal" "Enable personal configs/secrets" -}}
+{{-     $ssh = promptBoolOnce . "ssh" "ssh" -}}
+{{-     $syncthing = promptBoolOnce . "syncthing" "syncthing" -}}
+{{-     $starship = promptBoolOnce . "starship" "starship" -}}
+{{-     $emoji = promptBoolOnce . "emoji" "emoji in starship prompt" -}}
 {{-   end -}}
 {{- end -}}
 
@@ -43,6 +47,7 @@
     osid = {{ $osID | quote }}
 
     ssh = {{ $ssh }}
+    syncthing = {{ $syncthing }}
     starship = {{ $starship }}
     emoji = {{ $emoji }}
 

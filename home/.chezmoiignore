@@ -27,6 +27,14 @@
 !.ssh/conf.local.d/jiji.conf
 {{   end }}
 
+{{ else if eq .chezmoi.hostname "mijiji" }}
+!.chezmoiscripts/hosts/jiji/**
+
+{{   if .ssh }}
+.ssh/conf.local.d/**
+!.ssh/conf.local.d/mijiji.conf
+{{   end }}
+
 {{ end }}
 
 
@@ -42,6 +50,10 @@
 
 {{ if (or (not .ssh) (not .personal)) }}
 .ssh/**
+{{ end }}
+
+{{ if not .syncthing }}
+.chezmoiscripts/*syncthing.sh
 {{ end }}
 
 {{ if not .emoji }}

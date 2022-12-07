@@ -1,0 +1,27 @@
+#!{{ lookPath "bash" }}
+
+systemctl --user enable --now syncthing.service
+
+echo "remove default directory"
+syncthing cli config folders default delete
+
+echo "STEP 1: add 'primary' device (find ID in GUI of primary node)"
+read -p 'Device ID of Primary host: ' sync_prim_device_id
+syncthing cli config devices add --device-id "${sync_prim_device_id}" --introducer
+
+echo "STEP 2: in the primary host: open the GUI, accept request and share folder"
+read -p "Press [Enter] key when STEP 2 is done" void
+
+echo "STEP 3: in secondary host (this machine): open the GUI (check IP of this host), accept folder and adjust the path (.ssh_sync)"
+
+systemctl --user stop syncthing.service
+sed -i 's|127.0.0.1|0.0.0.0|g' ~/.config/syncthing/config.xml
+systemctl --user start syncthing.service
+
+read -p "Press [Enter] key when STEP 3 is done" void
+
+sed -i 's|0.0.0.0|127.0.0.1|g' ~/.config/syncthing/config.xml
+systemctl --user restart syncthing.service
+
+echo
+echo "Syncthing setup completed."
