@@ -1,15 +1,15 @@
 # Load only distro-specific scripts and configs
-.chezmoiscripts/os/**
+.chezmoiscripts/01_os/**
 
 {{ if eq .chezmoi.osRelease.id "arch" }}
-!.chezmoiscripts/os/arch/**
+!.chezmoiscripts/01_os/arch/**
 
 .packages*
 !.packages.arch
 {{ end }}
 
 {{ if eq .chezmoi.osRelease.id "debian" }}
-!.chezmoiscripts/os/debian/**
+!.chezmoiscripts/01_os/debian/**
 
 .packages*
 !.packages.debian
@@ -17,10 +17,10 @@
 
 
 # Load only host-specific scripts
-.chezmoiscripts/hosts/**
+.chezmoiscripts/02_hosts/**
 
 {{ if eq .chezmoi.hostname "jiji" }}
-!.chezmoiscripts/hosts/jiji/**
+!.chezmoiscripts/02_hosts/jiji/**
 
 {{   if .ssh }}
 .ssh/conf.local.d/**
@@ -28,7 +28,7 @@
 {{   end }}
 
 {{ else if eq .chezmoi.hostname "mijiji" }}
-!.chezmoiscripts/hosts/jiji/**
+!.chezmoiscripts/02_hosts/jiji/**
 
 {{   if .ssh }}
 .ssh/conf.local.d/**
@@ -40,7 +40,7 @@
 
 # ignore personal file (with module personal = false)
 {{ if not .personal }}
-.chezmoiscripts/*decrypt-chezmoi-age-key.sh
+.chezmoiscripts/00_init/*decrypt-chezmoi-age-key.sh
 .config/git/config_*
 {{ end }}
 
@@ -53,16 +53,16 @@
 {{ end }}
 
 {{ if not .syncthing }}
-.chezmoiscripts/*syncthing.sh
+.chezmoiscripts/03_general/*syncthing.sh
 {{ end }}
 
 {{ if not .emoji }}
 .emoji_db
 .config/systemd/user/emoji.service
-.chezmoiscripts/*emoji_service.sh
+.chezmoiscripts/03_general/*emoji_service.sh
 {{ end }}
 
 {{ if not .starship }}
 .config/starship*.toml
-.chezmoiscripts/os/debian/*starship.sh
+.chezmoiscripts/01_os/debian/*starship.sh
 {{ end }}
