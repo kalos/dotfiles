@@ -4,15 +4,15 @@
 {{ if eq .chezmoi.osRelease.id "arch" }}
 !.chezmoiscripts/01_os/arch/**
 
-.packages*
-!.packages.arch
+.packages_*
+!.packages_arch
 {{ end }}
 
 {{ if eq .chezmoi.osRelease.id "debian" }}
 !.chezmoiscripts/01_os/debian/**
 
-.packages*
-!.packages.debian
+.packages_*
+!.packages_debian
 {{ end }}
 
 

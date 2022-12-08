@@ -1,9 +1,12 @@
 #!{{ lookPath "bash" }}
 
-# packages.arch hash: {{ include (joinPath .chezmoi.homeDir ".packages.arch")  | sha256sum }}
+# packages.arch hash: {{ include (joinPath .chezmoi.homeDir ".packages_arch")  | sha256sum }}
 
 # install arch packages when packages.arch change
 # ref: https://www.chezmoi.io/user-guide/use-scripts-to-perform-actions/#run-a-script-when-the-contents-of-another-file-changes
 
-#sudo pacman -S --noconfirm --needed $(grep -Ev '^#|^$' "$(chezmoi target-path)/.packages.arch")
-grep -Ev '^#|^$' "$(chezmoi target-path)/.packages.arch" | xargs -r -- sudo pacman -S --noconfirm --needed
+if [[ $(command -v yay) ]]; then
+  grep -Ev '^#|^$' "$(chezmoi target-path)/.packages_arch" | xargs -r -- yay -S --noconfirm --needed
+else
+  grep -Ev '^#|^$' "$(chezmoi target-path)/.packages_arch" | xargs -r -- sudo pacman -S --noconfirm --needed
+fi
