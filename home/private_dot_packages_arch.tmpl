@@ -9,7 +9,7 @@ syncthing
 
 
 {{- /* install grub-btrfs only if btrfs is root fs and is used with specific layout */}}
-{{- if contains "subvol=/@" (output "findmnt" "-n" "--notruncate" "-o" "OPTIONS" "/") }}
+{{- if .btrfsFlat }}
 grub-btrfs
 {{- end }}
 

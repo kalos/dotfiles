@@ -5,11 +5,17 @@
 {{- $syncthing := false -}}
 {{- $starship := false -}}
 {{- $emoji := false -}}
+{{- $btrfsFlat := false -}}
 
 {{/* detect GitHub codespaces, VSCode remote containers, Docker containers, Multipass VMs, and Vagrant boxes */}}
 {{- if or (env "CODESPACES") (env "REMOTE_CONTAINERS_IPC") (eq .chezmoi.username "root" "ubuntu" "vagrant" "vscode") -}}
 {{-   $ephemeral = true -}}
 {{- end -}}
+
+{{/* detect btrfs flat layout https://btrfs.wiki.kernel.org/index.php/SysadminGuide#Flat */}}
+{{- if contains "/@" (output "findmnt" "-n" "--notruncate" "-t" "btrfs" "-o" "FSROOT" "/") -}}
+{{-   $btrfsFlat = true -}}
+{{- end }}
 
 {{/* default config per host */}}
 {{- if not $ephemeral -}}
@@ -45,6 +51,7 @@
     personal = {{ $personal }}
     ephemeral = {{ $ephemeral }}
     osid = {{ $osID | quote }}
+    btrfsFlat = {{ $btrfsFlat }}
 
     ssh = {{ $ssh }}
     syncthing = {{ $syncthing }}
