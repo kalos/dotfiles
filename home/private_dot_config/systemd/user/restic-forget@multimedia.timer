@@ -1,0 +1,10 @@
+[Unit]
+Description=Run restic backup only on fast network
+#Requires=network-check-fast.service
+
+[Timer]
+# il primo martedì del mese alle 12:55
+OnCalendar=Tue *-*-1..7 12:55:00
+
+[Install]
+WantedBy=timers.target

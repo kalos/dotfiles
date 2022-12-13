@@ -64,5 +64,9 @@
 
 {{ if not .starship }}
 .config/starship*.toml
-.chezmoiscripts/01_os/debian/*starship.sh
+{{ end }}
+
+{{ if not .backup }}
+.config/resticprofile
+.chezmoiscripts/03_general/*restic.sh
 {{ end }}

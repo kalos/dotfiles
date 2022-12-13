@@ -43,6 +43,16 @@ dog
 
 #passgen
 
+{{- if .backup }}
+## backup
+restic
+resticprofile-bin
+# required packages:
+jq
+#libnotify
+logrotate
+{{- end  }}
+
 
 
 ## host-specific settings:

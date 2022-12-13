@@ -1,0 +1,10 @@
+{{ .chezmoi.homeDir }}/.local/share/restic-*.log
+{
+  su {{ .chezmoi.username }} {{ .chezmoi.group }}
+  weekly
+  rotate 6
+  compress
+  missingok
+  notifempty
+  copytruncate
+}

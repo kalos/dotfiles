@@ -1,0 +1,17 @@
+#!{{ lookPath "bash" }}
+
+{{ if .starship }}
+command -v starship > /dev/null || curl -sS https://starship.rs/install.sh | sh -s -- -y
+{{ end }}
+
+{{ if .backup }}
+# resticprofile
+if [[ ! $(command -v resticprofile) ]]; then
+  pushd /tmp
+  curl -LO https://raw.githubusercontent.com/creativeprojects/resticprofile/master/install.sh
+  chmod +x install.sh
+  ./install.sh -b ${HOME}/.bin
+  rm install.sh
+  popd
+fi
+{{ end }}

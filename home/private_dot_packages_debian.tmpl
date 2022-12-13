@@ -33,6 +33,14 @@ ipcalc
 
 #passgen
 
+{{- if .backup }}
+## backup
+restic
+# required packages:
+jq
+#libnotify-bin
+logrotate
+{{- end  }}
 
 
 ## host-specific settings:

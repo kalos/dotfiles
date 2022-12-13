@@ -1,0 +1,24 @@
+[Unit]
+Description=restic backup (with resticprofile wrapper)
+Wants=network-online.target
+After=network-online.target
+ConditionACPower=true
+
+[Service]
+Type=notify
+Restart=no
+WorkingDirectory=%h/.config/resticprofile
+Environment="HOME=%h"
+ExecStartPre=%h/.bin/check_fast_networks.sh
+ExecStart={{ lookPath "resticprofile" }} --no-prio --no-ansi --config profiles.yaml --name %i --log %h/.local/share/restic-%i.log backup
+
+# Lower CPU and I/O priority.
+Nice=19
+CPUSchedulingPolicy=batch
+IOSchedulingClass=best-effort
+IOSchedulingPriority=7
+IOWeight=100
+
+
+[Install]
+WantedBy=default.target

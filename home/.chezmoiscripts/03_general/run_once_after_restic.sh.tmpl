@@ -1,0 +1,11 @@
+#!{{ lookPath "bash" }}
+
+# logrotate
+sudo cp /home/kalos/.config/resticprofile/.logrotate.conf /etc/logrotate.d/resticprofile
+
+# enable systemd timers
+pushd "$(chezmoi target-path)/.config/systemd/user/"
+for timer in restic*.timer ; do
+  systemctl --user enable ${timer}
+done
+popd

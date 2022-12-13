@@ -1,0 +1,14 @@
+[Unit]
+Description=Run restic backup only on fast network
+
+[Timer]
+# OBIETTIVO: fare il backup ogni 4h (30m dopo il boot)
+# esempio in orario di lavoro: accendo alle 9, backup alle 9:30, prossimo backup 17.30
+# problemi:
+#   - se riavvio il computer dopo 30m (e quindi dopo il backup) mi ritrovo più backup
+OnActiveSec=30min
+OnUnitActiveSec=4h
+
+
+[Install]
+WantedBy=timers.target

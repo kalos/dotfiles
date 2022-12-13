@@ -1,0 +1,9 @@
+[Unit]
+Description=Run restic backup only on fast network
+
+[Timer]
+# ogni giovedì alle 11:00
+OnCalendar=Thu *-*-* 11:00:00
+
+[Install]
+WantedBy=timers.target

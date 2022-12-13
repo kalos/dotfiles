@@ -3,6 +3,7 @@
 {{- $ephemeral := false -}}{{/* true if this host is ephemeral, e.g. a cloud or VM instance */}}
 {{- $ssh := false -}}
 {{- $syncthing := false -}}
+{{- $backup := false -}}{{/* restic[profile] and btrbk */}}
 {{- $starship := false -}}
 {{- $emoji := false -}}
 {{- $btrfsFlat := false -}}
@@ -23,18 +24,21 @@
 {{-     $personal = true -}}
 {{-     $ssh = true -}}
 {{-     $syncthing = true -}}
+{{-     $backup = true -}}
 {{-     $starship = true -}}
 {{-     $emoji = true -}}
 {{-   else if eq .chezmoi.os "android" -}}{{/* android */}}
 {{-     $personal = true -}}
 {{-     $ssh = true -}}
 {{-     $syncthing = true -}}
+{{-     $backup = false -}}
 {{-     $starship = false -}}
 {{-     $emoji = false -}}
 {{-   else if stdinIsATTY -}}
 {{-     $personal = promptBoolOnce . "personal" "Enable personal configs/secrets" -}}
 {{-     $ssh = promptBoolOnce . "ssh" "ssh" -}}
 {{-     $syncthing = promptBoolOnce . "syncthing" "syncthing" -}}
+{{-     $backup = promptBoolOnce . "backup" "backup (restic/btrbk)?" -}}
 {{-     $starship = promptBoolOnce . "starship" "starship" -}}
 {{-     $emoji = promptBoolOnce . "emoji" "emoji in starship prompt" -}}
 {{-   end -}}
@@ -55,6 +59,7 @@
 
     ssh = {{ $ssh }}
     syncthing = {{ $syncthing }}
+    backup = {{ $backup }}
     starship = {{ $starship }}
     emoji = {{ $emoji }}
 

@@ -1,0 +1,300 @@
+# sequenza per ogni backup:
+# - check last backup (tramite custom script)
+# - backup
+# - forget (+prune)
+# (il check viene fatto usanto un altro file unit e timer
+
+# schedule:
+# - clouds:
+#   - backup: ogni 4 ore
+#   - check: ogni settimana (martedì alle 16)
+#   - vincolo: rete veloce
+# - nas-desegno:
+#   - backup: ogni 4 ore
+#   - check: ogni settimana (mercoledì alle 11)
+#   - vincolo: da desegno
+# - multimedia:
+#   - backup: ogni settimana (giovedì alle 11:00)
+#   - check: ogni mese (primo martedì alle 12:55)
+#   - vincolo: rete veloce + hdd minij-ng
+#   - nota: potrebbe essere necessario portare minij-ng da desegno, ogni tanto
+
+
+
+# NOTE:
+# - Evitare di usare gli slash (/) finali nei nomi di directory, altrimenti non vengono cancellate (retention/forget)
+#   https://github.com/restic/restic/issues/2377
+#   in alternativa si può usare:
+#   forget:
+#     path: false
+
+# version 2 is in beta
+version: 1
+
+# directories/files to exclude
+{{ define "exclude_home" }}
+      - "*crashrecovery*"
+      - ".Trash/"
+      - ".VirtualBox_VMs/"
+      - ".ansible/tmp"
+      - ".adguard/workdir/"
+      - ".ansible_async"
+      - ".anydesk/incoming"
+      - ".ara/"
+      - ".cache/"
+      - ".cargo/"
+      - ".config/**/*Cached*/"
+      - ".config/**/Backup*/"
+      - ".config/**/Cache/"
+      - ".config/**/cache/"
+      - ".config/**/logs/"
+      - ".config/BraveSoftware/"
+      - ".config/Code/"
+      - ".config/Lens/"
+      - ".config/gnome-control-center/"
+      - ".config/google-chrome/"
+      - ".config/syncthing/index*"
+      - ".doom-emacs/"
+      - ".emacs.d/"
+      - ".gem/"
+      - ".krew/"
+      - ".kube/*cache/"
+      - ".local/**/*Cache*/"
+      - ".local/**/*cache*/"
+      - ".local/bin/"
+      - ".local/lib/"
+      - ".local/opt/"
+      - ".local/share/containers"
+      - ".local/share/fish/generated_completions"
+      - ".local/share/fonts"
+      - ".local/share/torbrowser"
+      - ".local/share/virtualenv"
+      - ".minikube/"
+      - ".npm/"
+      - ".packer.d/"
+      - ".thunderbird/**/*.sqlite-wal"
+      - ".thunderbird/lock"
+      - ".vagrant.d/"
+      - ".var/"
+      - ".virtualenvs/"
+      - ".vscode/"
+      - "/**/.cache"
+      - "Trash/"
+      - "cache"
+      - "firefox/*back*"
+      - "misc/"
+{{ end }}
+{{ define "exclude_projects" }}
+      - ".Trash/"
+      - ".cache/"
+      - "/**/.cache"
+      - "/**/.terraform/providers"
+      - "Trash/"
+      - "cache/"
+      - "projects/debian/l10n/"
+      - "projects/debian/packages/**/*"
+      - "!projects/debian/packages/ascii"
+      - "!projects/debian/packages/burp"
+      - "projects/devops/.ansible/"
+      - "projects/devops/ansible/**/artifacts/"
+      - "projects/libreit/clienti/nexus/abrflow-composer"
+      - "projects/libreit/clienti/primieri/kubernetes/activemq"
+{{ end }}
+
+
+global:
+  default-command: snapshots
+  initialize: false
+
+  # I/O nice/priority
+  ionice: true
+  ionice-class: 2
+  ionice-level: 6
+  # CPU nice/priority
+  nice: 19
+  priority: background
+
+  # prevent the system from sleeping
+  prevent-sleep: true
+
+  # if set to true it allows the next profile(s) to run after a failure
+  group-continue-on-error: true
+
+  # resticprofile won't start a profile if there's less than 100MB of RAM available
+  min-memory: 256
+
+  # Retry a restic command that failed on acquiring a lock every minute
+  # (at least), for up to the time specified in "--lock-wait duration".
+  restic-lock-retry-after: 1m
+  # Ask restic to unlock a stale lock when its age is more than 2 hours
+  # and the option "force-inactive-lock" is enabled in the profile.
+  restic-stale-lock-age: 2h
+
+  # systemd templates for service and timer
+  #   I prefer to use custom service/timer
+  #systemd-unit-template: .systemd.service.tmpl
+  #systemd-timer-template: .systemd.timer.tmpl
+
+# TEMPLATES
+# http hooks with variables
+{{ define "http_hooks" }}
+
+{{- $hcuuid := "void" }}
+{{- if eq .Profile.Name "jiji_proj_b2" }}
+{{-   $hcuuid = "c4cf6e38-08ff-404f-ac45-afa9901f78d6" }}
+{{- else if eq .Profile.Name "jiji_home_wasabi" "jiji_home_scaleway" "jiji_home_desegno" }}
+{{-   $hcuuid = "f1fa325b-251c-498d-a6ee-31066ce33737" }}
+{{- end }}
+
+    send-before:
+      - method: HEAD
+        url: https://hc-ping.com/{{ $hcuuid }}/start
+    send-after:
+      - method: HEAD
+        url: https://hc-ping.com/{{ $hcuuid }}
+    send-after-fail:
+        method: POST
+        url: https://hc-ping.com/{{ $hcuuid }}/fail
+        body: "${ERROR}\n\n${ERROR_STDERR}"
+        headers:
+          - name: Content-Type
+            value: "text/plain; charset=UTF-8"
+{{ end }}
+
+
+default:
+  #verbose: true
+  verbose: 3
+  status-file: "{{ .ConfigDir }}/.resticprofile.status"
+
+  # this will add a LOCAL lockfile so you cannot run the same profile more than once at a time
+  # (it's totally independent of the restic locks on the repository)
+  lock: "/tmp/resticprofile-{{ .Profile.Name }}.lock"
+  force-inactive-lock: true
+  
+  run-after-fail: "{{ .Env.HOME }}/.bin/notify.sh -u critical \"restic error: $PROFILE_NAME\" \"$PROFILE_COMMAND: $ERROR_STDERR $ERROR_MESSAGE\""
+
+  # limits down/up to a maximum rate (in KiB/s)
+  #limit-download: 2441 # 20 megabit
+  #limit-upload:   6103 # 50 megabit
+
+  backup:
+
+    one-file-system: false
+    exclude-caches: true
+
+    # restic warning occurs when it cannot read some files
+    no-error-on-warning: true
+
+    run-before: "{{ .ConfigDir }}/check_lastbackup.sh"
+
+    check-after: false
+
+    tag:
+      - resticprofile
+      - {{ .Profile.Name }}
+
+  retention:
+    after-backup: true
+    keep-last: 3
+    keep-tag:
+      - forever
+    prune: true
+
+  forget:
+    keep-within: 1m
+    keep-last: 3
+    keep-tag:
+      - forever
+    prune: true
+
+groups:
+  clouds:
+    - jiji_proj_b2
+    - jiji_home_wasabi
+    - jiji_home_scaleway
+  multimedia:
+    - jiji_multimedia_wasabi
+  desegno:
+    - jiji_home_desegno
+
+
+jiji_proj_b2:
+  inherit: default
+
+  backup:
+    source:
+      - /home/kalos/projects
+    one-file-system: true
+    exclude:
+      {{ template "exclude_projects" . }}
+
+    {{ template "http_hooks" . }}
+
+  retention:
+    keep-within: 1m
+
+  check:
+    read-data-subset: "2%"
+
+jiji_home_wasabi:
+  inherit: default
+
+  backup:
+    source:
+      - /home/kalos
+    one-file-system: true
+    exclude:
+      {{ template "exclude_home" . }}
+
+    {{ template "http_hooks" . }}
+
+  retention:
+    keep-within: 1m
+    after-backup: true
+    prune: true
+
+  check:
+    read-data-subset: "2%"
+
+jiji_home_scaleway:
+  inherit: jiji_home_wasabi
+  retention:
+    after-backup: false
+
+
+jiji_home_desegno:
+  inherit: jiji_home_wasabi
+
+
+jiji_multimedia_wasabi:
+  inherit: default
+
+  # non mostrare gli errori dovuti all'assenza del disco minij-ng 
+  # (continua a mostrare gli alert in caso di backup vecchio)
+  run-after-fail: ""
+
+  backup:
+    source:
+      - /mnt/minij-ng/@multimedia/
+    one-file-system: true
+    exclude-caches: true
+    exclude:
+      - "cellulare/**"
+      - "musica/**"
+      - ".stversions/**" 
+      - ".dtrash/**"
+
+    run-before: 
+      - "/bin/mountpoint -q /mnt/minij-ng"
+      - "{{ .ConfigDir }}/check_lastbackup.sh '14 days' '24 days'"
+
+  retention:
+    keep-within: 1m
+
+  check:
+    read-data-subset: "1%"
+    #read-data-subset: "0.15%"
+
+
+includes: "secrets.yaml"
