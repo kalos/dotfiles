@@ -1,4 +1,4 @@
-# Load only distro-specific scripts and configs
+## Load only distro-specific scripts and configs
 .chezmoiscripts/01_os/**
 
 {{ if eq .chezmoi.osRelease.id "arch" }}
@@ -16,9 +16,10 @@
 {{ end }}
 
 
-# Load only host-specific scripts
+## Load only host-specific scripts
 .chezmoiscripts/02_hosts/**
 
+# jiji
 {{ if eq .chezmoi.hostname "jiji" }}
 !.chezmoiscripts/02_hosts/jiji/**
 
@@ -26,9 +27,11 @@
 .ssh/conf.local.d/**
 !.ssh/conf.local.d/jiji.conf
 {{   end }}
+{{ end }}
 
-{{ else if eq .chezmoi.hostname "mijiji" }}
-!.chezmoiscripts/02_hosts/jiji/**
+# android (mijiji)
+{{ if eq .chezmoi.os "android" -}}
+!.chezmoiscripts/02_hosts/mijiji/**
 
 {{   if .ssh }}
 .ssh/conf.local.d/**
