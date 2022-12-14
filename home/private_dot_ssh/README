@@ -4,12 +4,24 @@ In chezmoi repo there are only 'config', conf.local.d/, known_hosts and keys (pr
 
 ~.ssh/
 ├── config (simple Include conf.d/* and conf.local.d/*)
-├── known_hosts
+├── known_hosts [symlink to syncthing ~/.ssh_sync/known_hosts file] (symlink managed with chezmoi)
 ├── id_ed25519
 ├── id_ed25519.pub
-├── conf.d [symlink to syncthing share dir] (symlink managed with chezmoi)
+├── conf.d [symlink to syncthing ~/.ssh_sync/conf.d dir] (symlink managed with chezmoi)
 │   ├── chebuoni.conf
 │   ├── libreit.conf
 │   └── tsway.conf
 └── conf.local.d
     └── jiji.conf / mijiji.conf / other (using template and .chezmoiignore)
+
+
+known_hosts:
+Only host 'jiji' have the permission (on syncthing) to update/write this file.
+
+Other host write to file known_hosts2 and use known_hosts as GlobalKnownHostsFile.
+Example: 
+Host *
+  UserKnownHostsFile ~/.ssh/known_hosts2
+  GlobalKnownHostsFile ~/.ssh/known_hosts
+
+This instruct ssh and fish host completion (func __fish_print_hostnames) to use both files.
