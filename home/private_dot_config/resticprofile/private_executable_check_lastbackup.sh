@@ -38,9 +38,9 @@ for profile in $(cat "${STATUS_FILE}" | jq -r '.[] | keys | .[]'); do
 
     # if the last backup is older than CRITICAL_THRESHOLD, send critical alarm
     if [[ "${date_critical_threshold}" -gt "${last_backup}" ]] ; then
-      /home/kalos/.bin/notify.sh -u critical "restic: $profile backup is TOO old!" "last backup: ${last_backup_date}"
+      /home/kalos/.bin/notify.sh -u critical "${HOSTNAME} restic: $profile backup is TOO old!" "last backup: ${last_backup_date}"
     else
-      /home/kalos/.bin/notify.sh "restic: $profile backup is a bit old!" "last backup: ${last_backup_date}"
+      /home/kalos/.bin/notify.sh "${HOSTNAME} restic: $profile backup is a bit old!" "last backup: ${last_backup_date}"
     fi
   fi
 done

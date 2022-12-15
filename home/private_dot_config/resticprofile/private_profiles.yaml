@@ -246,6 +246,7 @@ jiji_home_wasabi:
     one-file-system: true
     exclude:
       {{ template "exclude_home" . }}
+      {{ template "exclude_projects" . }}
 
     {{ template "http_hooks" . }}
 
