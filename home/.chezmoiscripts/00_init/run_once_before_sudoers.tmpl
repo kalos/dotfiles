@@ -9,8 +9,12 @@
 {{ end }}
 
 read -r -d '' _SUDOCONF << EOM
-Defaults timestamp_type=global
 Defaults timestamp_timeout=10
+
+# sudoers uses per-user time stamp files for credential caching.
+# use single time stamp record for all of a user's login sessio
+#Defaults timestamp_type=global
+
 Defaults umask = 0022
 Defaults umask_override
 
