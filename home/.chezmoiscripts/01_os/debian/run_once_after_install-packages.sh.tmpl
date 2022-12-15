@@ -1,5 +1,7 @@
 #!{{ lookPath "bash" }}
 
+# this script use '_after' prefix because use a template generated file (packages list), that is ready only in "_after" stage.
+
 # packages.debian hash: {{ include (joinPath .chezmoi.homeDir ".packages_debian")  | sha256sum }}
 
 # install arch packages when packages.arch change

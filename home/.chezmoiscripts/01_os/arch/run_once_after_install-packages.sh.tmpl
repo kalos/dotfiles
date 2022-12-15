@@ -1,12 +1,16 @@
 #!{{ lookPath "bash" }}
 
+# this script use '_after' prefix because use a template generated file (packages list), that is ready only in "_after" stage.
+
 # packages.arch hash: {{ include (joinPath .chezmoi.homeDir ".packages_arch")  | sha256sum }}
 
 # install arch packages when packages.arch change
 # ref: https://www.chezmoi.io/user-guide/use-scripts-to-perform-actions/#run-a-script-when-the-contents-of-another-file-changes
 
 if [[ $(command -v yay) ]]; then
-  grep -Ev '^#|^$' "$(chezmoi target-path)/.packages_arch" | xargs -r -- yay -S --noconfirm --needed
+  PACMAN="yay"
 else
-  grep -Ev '^#|^$' "$(chezmoi target-path)/.packages_arch" | xargs -r -- sudo pacman -S --noconfirm --needed
+  PACMAN="pacman"
 fi
+
+grep -Ev '^#|^$' "$(chezmoi target-path)/.packages_arch" | xargs -r -- ${PACMAN} -S --noconfirm --needed
