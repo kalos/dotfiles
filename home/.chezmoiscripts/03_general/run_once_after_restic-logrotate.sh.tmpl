@@ -1,0 +1,8 @@
+#!{{ lookPath "bash" }}
+
+# logrotate
+# .logrotate.conf hash: {{ include (joinPath .chezmoi.homeDir ".config/resticprofile/.logrotate.conf")  | sha256sum }}
+
+# link and set correct permission
+sudo ln -s "$(chezmoi target-path)/.config/resticprofile/.logrotate.conf" /etc/logrotate.d/resticprofile
+sudo chown root "$(chezmoi target-path)/.config/resticprofile/.logrotate.conf"
